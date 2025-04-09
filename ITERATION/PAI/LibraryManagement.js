@@ -8,7 +8,7 @@ function libraryItem(title,author,pages){
 }
 libraryItem.items =[]
 
-libraryItem.prototype.checkOut =function(userId){
+libraryItem.prototype.checkOut =(userId)=>{
     this.checkedOutBy =userId;
     console.log(`[${this.constructor.name}] ${this.title} checked out by ${userId }`)
 }
