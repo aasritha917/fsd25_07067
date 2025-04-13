@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client & Server communication</title>
+    <link rel="stylesheet" href="./styles.css" </head>
+    <style>
+        header,section,article,aside,footer{
+            padding: 5px;
+            margin: 5px;
+        }
+    </style>
+
+<body>
+    <header>
+        <h1>Client & Server communication Understanding</h1>
+        <nav>
+            <a href="#home"> HOME</a>
+            <a href="#journey">JOURNEY</a>
+            <a href="#Facts">FACTS</a>
+            <a href="#More">MORE</a>
+        </nav>
+    </header>
+
+    <section id="home">
+        <h2>Client-Server Communication</h2>
+        <p>Client-server communication is a network architecture where clients request services or data from servers.
+            The server then provides the requested information or services back to the client. <br>
+            This interaction follows a request-response pattern, meaning the client sends a request and the server
+            responds. <br>
+            Here's a more detailed breakdown:<br>
+            <b>Client:</b><br>
+            <i>Definition:</i>
+            A client is a device or program that makes requests for services or resources from a server. 
+            <br>
+            <i>Examples:</i>
+            Web browsers, mobile apps, or even other computers on a network that need to access a server's data or functionality. 
+            <br>
+            <i>Function:</i>
+            Clients typically initiate communication, requesting data, files, or services from a server. <br>
+            <b>Server:</b><br>
+            <i>Definition: </i>A server is a computer or system that provides services or resources to clients. 
+            <br>
+            <i>Examples:</i> Web servers, email servers, or databases that store and manage data. 
+            <br>
+            <i>Function:</i> Servers listen for requests from clients, process those requests, and then send back the requested data or services. </p>
+    </section>
+    <article id="journey">
+        <h2>Journey of a Web Request</h2>
+        <p>A web request journey begins when a user enters a URL into a browser, which then initiates an HTTP request to
+            the server hosting the webpage. The server processes this request, retrieves the requested data (HTML, CSS,
+            JavaScript, etc.), and sends it back as an HTTP response.
+            Finally, the browser receives the response and renders the webpage for the user. <br></p>
+        <ol>
+            <li>User enters the URL in the Search bar</li>
+            <li>DNS translates the domin to IP</li>
+            <li>Browser sends an http request to server</li>
+            <li>Server checks the request and send a resposne</li>
+            <li>Browser displayes the webpage</li>
+        </ol>
+        <ul>
+            <li>HTTP</li>
+            <li>DNS</li>
+            <li>TCP/Ip</li>
+        </ul>
+        <hr>
+        <table border="1" align="center">
+            <caption>Client VS Server</caption>
+            <br>
+            <tr>
+                <th>Function</th>
+                <th>Client</th>
+                <th>Server</th>
+            </tr>
+            <tr>
+                <td>Execution</td>
+                <td>Needs only browset to run</td>
+                <td>requirs a server&services for execute</td>
+            </tr>
+            <tr>
+                <td>Types of Applications</td>
+                <td>HTML,CSS,JS</td>
+                <td>JAVA,PHP,Ruby</td>
+            </tr>
+            <tr>
+                <td>Support & Documentation</td>
+                <td>SO MUCH </td>
+                <td>Tons</td>
+            </tr>
+            <tr>
+                <td>Community</td>
+                <td>Huge</td>
+                <td>Even Bigger</td>
+            </tr>
+        </table>
+        <br>
+        <table border="1" align="center">
+            <caption> Static Vs Dynamic Website</caption>
+            <br>
+            <tr>
+                <td><b>Fraturs</b></td>
+                <td><b>Static</b></td>
+                <td><b>Dynamic</b></td>
+            </tr>
+            <tr>
+                <td>Content</td>
+                <td>Fixed</td>
+                <td>Fluid</td>
+            </tr>
+            <tr>
+                <td>interactive</td>
+                <td>Limited</td>
+                <td>Hightly interactive</td>
+            </tr>
+            <tr>
+                <td>Load time</td>
+                <td>
+                    Faster
+                </td>
+                <td>Slower</td>
+            </tr>
+            <tr>
+                <td>Langunages</td>
+                <td>Html,CSS,Js</td>
+                <td>Php,node.js</td>
+            </tr>
+            <tr>
+                <td>Cost</td>
+                <td>Cheaper</td>
+                <td>Expensive</td>
+            </tr>
+
+        </table>
+    </article>
+
+    <aside>
+        <h3>Quick facts and tips</h3>
+        <p>Client-server communication involves a client sending requests to a server, which then responds. This model is fundamental to many web applications and network services. 
+            Key aspects include HTTP protocols, two communication modes (pull and push), and various technologies for efficient communication. </p>
+    </aside>
+    <section>
+        <h3>Media</h3>
+        <img src="data:image/png;base64,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" alt="Client-server diagram">
+        
+        <p>For More Information refer this vedio</p>
+        <iframe width="500" height="300" src="https://www.youtube.com/embed/mViXPzoB4Qc?si=Agm-Xc7hCjxnHYG9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        
+        <p>this is one of the once whice have self data center</p>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d23513.015615758417!2d78.34610121083983!3d17.436170999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93e2eb59cf6b%3A0x5b55795ff9a847f1!2sCtrlS%20Datacenters!5e1!3m2!1sen!2sin!4v1744528955623!5m2!1sen!2sin" width="500" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </section>
+
+    <section id="Facts">
+        <h3>Facts and Quiz</h3>
+        <form>
+            <p>1. …………………… tier it’s much easier to design the application to be DBMS agnostic.</p>
+            <input type="radio" name="client" value="a">Middle application server
+            <input type="radio" name="client" value="b">Multithreaded application<br>
+            <input type="radio" name="client" value="c"> Application server
+            <input type="radio" name="client" value="d">Client-server application
+
+            <p>2. Which of the following is not the correct benefit of distributed computing.</p>
+            <input type="radio" name="serve" value="a"> Resource sharing
+            <input type="radio" name="server" value="b"> Performance<br>
+            <input type="radio" name="server" value="c"> Availability
+            <input type="radio" name="server" value="d">Security
+
+            <p>3. In …………………… the client invokes the request and then blocks waiting for the response.</p>
+            <input type="radio" name="option" value="a"> Deferred Synchronous Invocation
+            <input type="radio" name="option" value="b"> One way Invocation<br>
+            <input type="radio" name="option" value="c"> Synchronous Invocation
+            <input type="radio" name="option" value="d">Two-way Invocation
+
+            <p>Feedback:</p>
+            <input type="text" placeholder="Enter your Feedback">
+            <br>
+            <br>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+
+    <footer id="More">
+        <p>Author : AASRITHA.K</p>
+        <p>Explore More On <a href="https://www.freecodecamp.org/">FreeCodeCamp</a>,<a href="https://www.w3schools.com/">W3Schools</a></p>
+    </footer>
+</body>
+
+</html>

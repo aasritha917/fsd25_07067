@@ -1,0 +1,36 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: rgb(197, 230, 232);
+}
+header{
+    text-align: center;
+    font-weight: 200;
+    color: blue;
+}
+nav a{
+    text-decoration: none;
+    margin: 0px 30px;
+    
+}
+a:hover{
+    background-color: rgb(105, 137, 105);
+}
+table{
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 10px;
+    text-align: center;
+    align-items: center;
+}
+img{
+    width: 100%;
+    max-width: 500px;
+}
+button:hover{
+    background-color: rgb(42, 122, 42);
+}
+i{
+    padding: 40px;
+}
