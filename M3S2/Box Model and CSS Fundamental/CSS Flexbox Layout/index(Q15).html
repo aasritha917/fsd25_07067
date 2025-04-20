@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #left {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        section {
+            border: 2px solid black;
+            padding: 10px;
+            align-items: center;
+            border-radius: 10px;
+            align-items: flex-start;
+            display: flex;
+            align-items: center;
+            width: 600px;
+            margin-left: 250px;
+        }
+
+        #box1,
+        #box3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 1px;
+            padding: 1px;
+            border: 2px solid black;
+            height: 150px;
+            width: 250px;
+            border-radius: 10px;
+        }
+
+        #box1>div {
+            border: 2px solid black;
+            border-radius: 50%;
+            height: 50px;
+            width: 50px;
+            padding: 2px;
+            text-align: center;
+            margin: 10px 0px 0px 10px;
+
+        }
+
+        #box2 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 1px;
+            padding: 1px;
+            border: 2px solid rgb(255, 253, 253);
+            height: 80px;
+            width: 250px;
+            margin: 0px;
+
+        }
+
+        #box2>div {
+            border: 2px solid black;
+            border-radius: 50%;
+            height: 50px;
+            width: 50px;
+            padding: 2px;
+            text-align: center;
+            margin: 10px 0px 0px 10px;
+
+        }
+
+        #box3>div {
+            border: 2px solid black;
+            border-radius: 50%;
+            height: 50px;
+            width: 50px;
+            padding: 2px;
+            text-align: center;
+            margin: 10px 0px 0px 10px;
+        }
+
+        #squ {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            
+        }
+
+        #squ>div {
+            border: 2px solid black;
+            border-radius: 10px;
+            flex-direction: row;
+            width: 200px;
+            height: 65px;
+            text-align: center;
+            margin: 10px;
+            
+            display: flex;
+        }
+        #right{
+            border: 2px solid black;
+            border-radius: 10px;
+            margin-top: 10px;
+            flex-direction: column;
+            margin-left: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <div id="left">
+            <div id="box1">
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+            </div>
+            <div id="box2">
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+            </div>
+            <div id="box3">
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+            </div>
+        </div>
+        <div id="right">
+            <div id="squ">
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
