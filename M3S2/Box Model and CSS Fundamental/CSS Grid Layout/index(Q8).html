@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        body{
+            border: 1px solid black;
+            width:250px;
+            text-align: center;
+            border-radius: 5px;
+        }
+        section{
+            border: 1px solid ;
+            width: 250px;
+            display: flex;
+            
+        }
+        #main{
+            margin: 3px;
+            padding: 2px;
+            background-color: rgb(224, 241, 241);
+            display: grid;
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+        #main>div{
+            height: 50px;
+            width: 100px;
+            border-radius: 5px;
+        }
+        #num>div{
+            display: flex;
+            border:1px solid ;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            padding: 10px;
+            margin: 10px;
+            box-shadow: rgb(164, 156, 156);
+            font-weight: 500px;
+            border-radius: 5px;
+
+        }
+        #op{
+            background-color: black;
+            color: white;
+        }
+        #clear{
+            background-color: red;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Masai Calculator</h2>
+    <div id="main">
+        <div> </div>
+    </div>
+    <section>
+        
+        <div id="num">
+            <div>1</div>
+            <div>4</div>
+            <div>7</div>
+            <div id="clear">C</div>
+
+        </div>
+        <div id="num">
+            <div>2</div>
+            <div>5</div>
+            <div>8</div>
+            <div>0</div>
+        </div>
+        <div id="num">
+            <div>3</div>
+            <div>6</div>
+            <div>9</div>
+            <div id="op">=</div>
+        </div>
+        <div id="num">
+            
+            <div id="op">+</div>
+            <div id="op">-</div>
+            <div id="op">X</div>
+            <div id="op">/</div>
+        </div>
+
+    </section>
+</body>
+</html>
