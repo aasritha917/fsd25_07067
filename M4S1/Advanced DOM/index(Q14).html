@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Task List</title>
+</head>
+<body>
+  <input id="taskInput" type="text" placeholder="Enter task">
+  <button id="addTask">Add Task</button>
+  <ul id="taskList"></ul>
+
+  <script>
+    const addTaskButton = document.getElementById('addTask');
+    const taskInput = document.getElementById('taskInput');
+    const taskList = document.getElementById('taskList');
+
+    addTaskButton.onclick = function () {
+      const taskText = taskInput.value;
+      const newTask = document.createElement('li');
+      newTask.innerHTML = taskText;
+      taskList.appendChild(newTask); // Issue 1: Incorrect method
+    };
+
+    taskList.onclick = function (e) {
+      if (e.target.tagName  === 'LI') {
+        e.target.remove(); // Issue 2: Incorrect condition
+      }
+    };
+  </script>
+</body>
+</html>
+

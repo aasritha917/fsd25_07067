@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        align-items: center;
+        margin-top: 200px;
+        margin-left: 40px;
+    }
+
+    button {
+        align-items: center;
+        padding: 5px;
+        margin: 20px;
+    }
+</style>
+
+<body>
+    <div>
+        <form>
+            <input id="color" type="text" placeholder="Color Name">
+            <input id="text" type="text" placeholder="Enter Context">
+        </form>
+    </div>
+    <button onclick="changeBg()">Change Background</button>
+    <button onclick="updateTx()">Update Text</button>
+    <div id="myDiv"> Initial Text</div>
+</body>
+
+</html>
+<script>
+    function changeBg() {
+        let color = document.getElementById('color').value
+        document.getElementById('myDiv').style.backgroundColor = color
+
+    }
+    function updateTx() {
+        let newtext = document.getElementById("text").value
+        document.getElementsById('myDiv').innerText = newtext
+    }
+</script>

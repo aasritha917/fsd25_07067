@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <ul id="itemList">
+            <li>item1</li>
+            <li>item2</li>
+            <li>item3</li>
+        </ul>
+
+        <button onclick="addItem()">Add Item</button>
+    </div>
+    
+</body>
+
+</html>
+<script>
+    function addItem(){
+        let ul = document.querySelector('#itemList')
+        let newli = document.createElement('li')
+        newli.innerText = "New item"
+
+        let count = ul.children.length +1
+
+        if(count %2 ==0){
+            newli.style.fontStyle ="italic"
+            newli.style.color="red"
+        }
+        else{
+            newli.style.fontWeight="bold"
+            newli.style.color="blue"
+        }
+        ul.appendChild(newli)
+    }
+</script>

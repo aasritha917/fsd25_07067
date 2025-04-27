@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <ul>
+            <li>Running</li>
+            <li>reading NEWS</li>
+        </ul>
+    </div>
+    <form>
+        <input id="taskInput" type="text" placeholder="Enter your Task">
+
+    </form>
+    <button onclick="addTask()">Add Task</button>
+    <button onclick="del()">Delete</button>
+    <button onclick="Complete()">Completed</button>
+    
+</body>
+</html>
+<script>
+    function addTask(){
+        let input = document.getElementById("taskInput")
+        let taskText = input.value
+
+        if(taskText == ""){
+            alert("Please enter the task")
+            return
+        }
+        let li = document.createElement("li")
+            li.innerText = taskText
+    }
+    function del(){
+        let completeBtn = document.createElement("button")
+            completeBtn.innerText = "Complete"
+            completeBtn.onclick = function() {
+                li.style.textDecoration = "line-through"
+            };
+    }
+    function Complete(){
+
+    }
+</script>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="container">
+        <p>this is Paragraph</p>
+    </div>
+    <button onclick="newPa()">New Paragraph</button>
+    <button onclick="removePa()">remove Paragraph</button>
+</body>
+
+</html>
+<script>
+    function newPa() {
+        let newpara = document.createElement('p')
+        newpara.innerText = "New PARAGEAPH"
+        document.getElementById('container').appendChild(newpara)
+    }
+    function removePa() {
+        let paragraphs = remove.getElementsByTagName('p');
+        if (paragraphs.length > 0) {
+            remove.removeChild(paragraphs[paragraphs.length - 1]);
+        }
+    }
+</script>
