@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Choose a Theme</h1>
+    <select id="themeSelect" onchange="changeTheme()">
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="blue">Blue</option>
+    </select>
+
+</body>
+
+</html>
+<script>
+    function changeTheme() {
+        let theme = document.getElementById('themeSelect').value;
+        applyTheme(theme);
+        sessionStorage.setItem('theme', theme);
+    }
+
+    function applyTheme(theme) {
+        if (theme === 'light') {
+            document.body.style.backgroundColor = 'white';
+            document.body.style.color = 'black';
+        } else if (theme === 'dark') {
+            document.body.style.backgroundColor = 'black';
+            document.body.style.color = 'white';
+        } else if (theme === 'blue') {
+            document.body.style.backgroundColor = 'lightblue';
+            document.body.style.color = 'navy';
+        }
+    }
+
+    window.onload = function () {
+        let savedTheme = sessionStorage.getItem('theme') || 'light';
+        document.getElementById('themeSelect').value = savedTheme;
+        applyTheme(savedTheme);
+    }
+</script>
