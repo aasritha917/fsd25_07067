@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Sharing Web Application</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <header>
+        <h2>Recipe🥗 Sharing App</h2>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#AddRecipe">Add Recipe</a>
+            <a href="#ViewRecipes">View Recipes</a>
+        </nav>
+    </header>
+
+    <section id="home">
+        <p>Welcome To The Recipe Sharing App<br>
+        
+       Discover, Share and enjoy yummmmyyyyyy🤤 recipes!🥗</p>
+    </section>
+
+    <section id="AddRecipe">
+        <h2> Add NEW RECIEPE</h2>
+        <form id="form">
+            <label>Reciepe Name: <input type="text" placeholder="Dish Name" id="name"></label><br>
+            <label>Ingredines: <textarea placeholder="Add Ingredines" id="ing" rows="6" required></textarea></label>
+            <br>
+            <label> Category:
+                <select id="category" required>
+                    <option value="">SELECT</option>
+                    <option value="Breakfast">Breakfast🍳</option>
+                    <option value="Lunch">Lunch🍚</option>
+                    <option value="Dinner">Dinner🍽️</option>
+                    <option value="Dessert">Dessert🍡</option>
+                    <option value="Drinks">Drinks🍸</option>
+                </select>
+            </label><br>
+            <label>Preperation Steps:
+                <textarea id="steps" placeholder="steps" required ></textarea>
+            </label><br>
+            <button id="submit">Submit</button>
+        </form>
+    </section>
+
+    <section id="ViewRecipes">
+        <h2>View Recipe</h2>
+        <label >Filter By Category
+            <select id="filter" required>
+                <option value="">SELECT</option>
+                <option value="Breakfast">Breakfast🍳</option>
+                <option value="Lunch">Lunch🍚</option>
+                <option value="Dinner">Dinner🍽️</option>
+                <option value="Dessert">Dessert🍡</option>
+                <option value="Drinks">Drinks🍸</option>
+            </select>
+        </label>
+        <div id="recipe" class="grid"> </div>
+    </section>
+    <footer>
+        <p> THANKS FOR VISITING US!</p>
+        <p>Contact us:
+            
+        </p>
+        <p> & copy; 2025 Recipe Sharing App. Made With LOVE <3 </p>
+    </footer>
+    
+</body>
+
+</html>
