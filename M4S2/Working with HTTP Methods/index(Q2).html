@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    h2 {
+        margin: 20px 500px;
+    }
+
+    form {
+        margin: 20px 450px;
+        padding: 50px;
+
+    }
+</style>
+
+<body>
+    <header>
+        <h2>
+            User Registration Form
+        </h2>
+    </header>
+    
+        <form id="registerForm">
+            <label>ENTER NAME :- <input type="text" id="name" placeholder="Name"></label><br><br>
+            <label>ENTER EMAIL:- <input type="email" id="email" placeholder="@gmail.com"></label><br><br>
+            <label>PASSWORD :- <input type="password" id="password" placeholder="******"></label><br><br>
+            <button type="submit">REGISTER</button>
+        </form>
+    <div id="message"></div>
+</body>
+
+</html>
+<script>
+    let form = document.getElementById("registerForm");
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        let name = document.getElementById("name").value;
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+        let message = document.getElementById("message");
+
+        if (name === "" || email === "" || password === "") {
+            message.textContent = "Please fill all the fields.";
+            message.style.color = "red";
+            return;
+        }
+
+        fetch("https://mockapi.io/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                password: password
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            message.textContent = "Registered successfully!";
+            message.style.color = "green";
+            form.reset();
+        })
+        .catch(error => {
+            message.textContent = "Something went wrong.";
+            message.style.color = "red";
+            console.log(error);
+        });
+    });
+</script>

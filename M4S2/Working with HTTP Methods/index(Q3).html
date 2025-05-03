@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Manager</title>
+  <style>
+    body {
+      margin: 20px 500px;
+      font-family: Arial;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h2>TASK MANAGER</h2>
+  </header>
+
+  <div id="taskList"></div>
+  /body>
+
+  </html>
+  <script>
+    const apiURL = "https://64f8f1f8824680fd217f9e13.mockapi.io/tasks"; 
+
+    function loadTasks() {
+      fetch(apiURL)
+        .then(res => res.json())
+        .then(data => {
+          const taskList = document.getElementById("taskList");
+          taskList.innerHTML = "";
+
+          data.forEach(task => {
+            taskList.innerHTML += `
+              <div id="task-${task.id}">
+                <input id="title-${task.id}" value="${task.title}" />
+                <select id="status-${task.id}">
+                  <option ${task.status === "Pending" ? "selected" : ""}>Pending</option>
+                  <option ${task.status === "Completed" ? "selected" : ""}>Completed</option>
+                </select>
+                <button onclick="editTask('${task.id}')">Edit</button>
+                <button onclick="deleteTask('${task.id}')">Delete</button>
+              </div>
+              <br/>
+            `;
+          });
+        })
+        .catch(() => alert("Failed to load tasks"));
+    }
+
+    function editTask(id) {
+      const title = document.getElementById(`title-${id}`).value;
+      const status = document.getElementById(`status-${id}`).value;
+
+      fetch(`${apiURL}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ title, status })
+      })
+        .then(() => loadTasks())
+        .catch(() => alert("Update failed"));
+    }
+
+    function deleteTask(id) {
+      if (confirm("Are you sure to delete?")) {
+        fetch(`${apiURL}/${id}`, {
+          method: "DELETE"
+        })
+          .then(() => loadTasks())
+          .catch(() => alert("Delete failed"));
+      }
+    }
+
+    window.onload = loadTasks;
+  </script>
+<

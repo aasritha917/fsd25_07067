@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Dashboard</title>
+</head>
+<body>
+
+  <h2>User Dashboard</h2>
+
+  <form id="userForm">
+    <input type="text" id="name" placeholder="Enter name" required />
+    <input type="email" id="email" placeholder="Enter email" required />
+    <button type="submit">Add User</button>
+  </form>
+
+  <div id="message"></div>
+  <h3>All Users:</h3>
+  <div id="userList"></div>
+
+</body>
+</html>
+
+  <script>
+    const apiURL = "https://mockapi.io/users";
+
+    function getUsers() {
+      fetch(apiURL)
+        .then(response => response.json())
+        .then(data => {
+          let list = document.getElementById("userList");
+          list.innerHTML = "";
+          data.forEach(user => {
+            let div = document.createElement("div");
+            div.textContent = `${user.name} - ${user.email}`;
+            list.appendChild(div);
+          });
+        })
+        .catch(() => showMessage("Could not load users", "red"));
+    }
+
+    function showMessage(text, color) {
+      let msg = document.getElementById("message");
+      msg.textContent = text;
+      msg.style.color = color;
+      setTimeout(() => msg.textContent = "", 3000);
+    }
+
+    document.getElementById("userForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      let name = document.getElementById("name").value.trim();
+      let email = document.getElementById("email").value.trim();
+
+      if (name === "" || email === "") {
+        showMessage("Please enter both name and email", "orange");
+        return;
+      }
+
+      let user = { name, email };
+
+      fetch(apiURL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+      })
+      .then(res => res.json())
+      .then(() => {
+        showMessage("User added successfully!", "green");
+        document.getElementById("userForm").reset();
+        getUsers();
+      })
+      .catch(() => showMessage("Error adding user", "red"));
+    });
+
+    getUsers();
+  </script>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    h2 {
+        margin: 20px 500px;
+    }
+
+    form {
+        margin: 20px 350px;
+    }
+</style>
+
+<body>
+    <header>
+        <h2>SHOPPING MART</h2>
+    </header>
+    <form id="searchForm">
+        <select id="category">
+            <option value="electronics">Electronics</option>
+            <option value="clothing">Clothing</option>
+            <option value="books">Books</option>
+        </select>
+        <input type="number" id="minPrice" placeholder="Minimum price" />
+        <input type="number" id="maxPrice" placeholder="Maximum price" />
+        <button type="submit">Search</button>
+    </form>
+
+    <section id="products">
+
+    </section>
+</body>
+
+</html>
+<script>
+    document.getElementById("searchForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        let category = document.getElementById("category").value;
+        let minPrice = document.getElementById("minPrice").value;
+        let maxPrice = document.getElementById("maxPrice").value;
+
+        let productsDiv = document.getElementById("products");
+        productsDiv.innerHTML = "Loading...";
+
+        let apiUrl = `https://mockapi.io/products?category=${category}&min_price=${minPrice}&max_price=${maxPrice}`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                productsDiv.innerHTML = "";
+
+                if (data.length === 0) {
+                    productsDiv.innerHTML = "No products found.";
+                    return;
+                }
+
+                data.forEach(product => {
+                    productsDiv.innerHTML += `
+                        <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+                            <img src="${product.image || 'https://via.placeholder.com/150'}" width="150" />
+                            <h3>${product.name}</h3>
+                            <p>₹${product.price}</p>
+                        </div>
+                    `;
+                });
+            })
+            .catch(error => {
+                console.log("Error:", error);
+                productsDiv.innerHTML = "Something went wrong.";
+            });
+    });
+</script>
