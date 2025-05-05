@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Student Profile Dashboard" />
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+
+        }
+
+        header,
+        footer {
+            background: rgb(106, 124, 124);
+            color: rgb(228, 223, 223);
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        form label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        #studentForm {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid white;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: white;
+        }
+
+        .dark-mode {
+            background: black;
+            color: white;
+        }
+
+        .dark-mode th {
+            background: rgb(49, 49, 49);
+        }
+
+        @media (max-width: 600px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#profile">Profile</a></li>
+                <li><a href="#settings">Settings</a></li>
+            </ul>
+            <button id="darkToggle">🌙</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="profile-form">
+            <h2>Edit Student Profile</h2>
+            <form id="studentForm">
+                <label>Name: <input type="text" id="name" required /></label>
+                <label>Age: <input type="number" id="age" required /></label>
+                <label>Email: <input type="email" id="email" required /></label>
+                <label>Course:
+                    <select id="course">
+                        <option value="sd">Software development</option>
+                        <option value="tese">Testing</option>
+                        <option value="ds">Data Science</option>
+                        <option value="aiml">AI&ML</option>
+                        <option value="bc">Block Chain</option>
+                    </select>
+                </label>
+                <label>Gender:
+                    <input type="radio" name="gender" value="Male" /> Male
+                    <input type="radio" name="gender" value="Female" /> Female
+                </label>
+                <label>Skills:
+                    <input type="checkbox" value="HTML" class="skill" /> HTML,Css
+                    <input type="checkbox" value="java" class="skill" /> Java
+                    <input type="checkbox" value="py" class="skill" /> Python
+                    <input type="checkbox" value="JS" class="skill" /> JavaScript
+
+                </label>
+                <label>Profile Image:
+                    <input type="file" id="profileImage" accept="image/*" />
+                </label>
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+
+        <section id="student-table">
+            <h2>Student List</h2>
+            <input type="text" id="searchInput" placeholder="Search by name" />
+            <button id="sortBtn">Sort A-Z</button>
+            <button id="loadDataBtn">Load Data</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Email</th>
+                        <th>Course</th>
+                        <th>Gender</th>
+                        <th>Skills</th>
+                        <th>Image</th>
+                    </tr>
+                </thead>
+                <tbody id="studentList"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Student Dashboard</p>
+    </footer>
+</body>
+
+</html>
+<script>
+    let form = document.getElementById('studentForm');
+    let studentList = document.getElementById('studentList');
+    let darkToggle = document.getElementById('darkToggle');
+    let sortBtn = document.getElementById('sortBtn');
+    let searchInput = document.getElementById('searchInput');
+
+    let students = JSON.parse(localStorage.getItem('students')) || [];
+
+    let renderStudents = (data) => {
+        studentList.innerHTML = '';
+        data.forEach(student => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+          <td>${student.name}</td>
+          <td>${student.age}</td>
+          <td>${student.email}</td>
+          <td>${student.course}</td>
+          <td>${student.gender}</td>
+          <td>${student.skills.join(', ')}</td>
+          <td><img src="${student.image}" alt="Profile" width="50" /></td>
+        `;
+            studentList.appendChild(row);
+        });
+    };
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let name = document.getElementById('name').value;
+        let age = document.getElementById('age').value;
+        let email = document.getElementById('email').value;
+        let course = document.getElementById('course').value;
+        let gender = document.querySelector('input[name="gender"]:checked').value;
+        let skills = Array.from(document.querySelectorAll('.skill:checked')).map(cb => cb.value);
+        let imageFile = document.getElementById('profileImage').files[0];
+        let reader = new FileReader();
+
+        reader.onloadend = function () {
+            const newStudent = { name, age, email, course, gender, skills, image: reader.result };
+            students.push(newStudent);
+            localStorage.setItem('students', JSON.stringify(students));
+            renderStudents(students);
+            form.reset();
+        };
+
+        if (imageFile) {
+            reader.readAsDataURL(imageFile);
+        } else {
+            reader.onloadend();
+        }
+    });
+
+    sortBtn.addEventListener('click', () => {
+        students.sort((a, b) => a.name.localeCompare(b.name));
+        renderStudents(students);
+    });
+
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase();
+        const filtered = students.filter(s => s.name.toLowerCase().includes(query));
+        renderStudents(filtered);
+    });
+
+    darkToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+    });
+
+    document.getElementById('loadDataBtn').addEventListener('click', () => {
+        renderStudents(students);
+    });
+
+    window.onload = () => renderStudents(students);
+</script>
