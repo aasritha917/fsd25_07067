@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Throttled Image Slider</title>
+  <style>
+    body {
+      text-align: center;
+      padding: 30px;
+    }
+    img {
+      width: 600px;
+      height: 300px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px black;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #slideNumber {
+      margin-top: 15px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Throttled Image Slider</h2>
+  <img id="sliderImage" src="https://picsum.photos/600/400?random=1" alt="Image" />
+  <div>
+    <button onclick="navigate('prev')">Previous</button>
+    <button onclick="navigate('next')">Next</button>
+  </div>
+  <div id="slideNumber">Slide: 1</div>
+
+</body>
+</html>
+
+<script>
+    let currentSlide = 1;
+    let lastClickTime = 0;
+    let clickCount = 0;
+    let throttle = false;
+
+    function navigate(direction) {
+      const now = Date.now();
+
+      if (now - lastClickTime < 1000) {
+        clickCount++;
+        if (clickCount > 3) {
+          alert("Chill chill, loading it!!");
+          return;
+        }
+      } else {
+        clickCount = 1;
+      }
+
+      if (throttle) return;
+
+      throttle = true;
+      setTimeout(() => {
+        throttle = false;
+      }, 1000);
+
+      lastClickTime = now;
+
+      if (direction === 'next') {
+        currentSlide++;
+      } else if (direction === 'prev' && currentSlide > 1) {
+        currentSlide--;
+      }
+
+      document.getElementById('sliderImage').src = `https://picsum.photos/600/400?random=${Date.now()}`;
+      document.getElementById('slideNumber').textContent = `Slide: ${currentSlide}`;
+    }
+  </script>
