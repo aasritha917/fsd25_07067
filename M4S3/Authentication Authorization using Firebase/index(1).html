@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Firebase Auth + Dashboard</title>
+  <style>
+    .hidden { display: none; }
+    img { width: 100px; }
+    .product { border: 1px solid #ccc; padding: 10px; margin: 10px; }
+  </style>
+</head>
+<body>
+
+  <!-- Register -->
+  <div id="register-section">
+    <h2>Register</h2>
+    <input id="reg-name" type="text" placeholder="Name"><br>
+    <input id="reg-email" type="email" placeholder="Email"><br>
+    <input id="reg-password" type="password" placeholder="Password"><br>
+    <button onclick="register()">Register</button><br>
+    <small>Already registered? <a href="#" onclick="toggle('login')">Login</a></small>
+  </div>
+
+  <!-- Login -->
+  <div id="login-section" class="hidden">
+    <h2>Login</h2>
+    <input id="login-email" type="email" placeholder="Email"><br>
+    <input id="login-password" type="password" placeholder="Password"><br>
+    <button onclick="login()">Login</button><br>
+    <small>New here? <a href="#" onclick="toggle('register')">Register</a></small>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard-section" class="hidden">
+    <h2>Dashboard</h2>
+    <button onclick="logout()">Logout</button>
+    <div id="products"></div>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+
+  <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAvwhsGI_xVrRStxuAl8EzjKiCF9ARFNFA",
+        authDomain: "regestration-1e4fd.firebaseapp.com",
+        projectId: "regestration-1e4fd",
+        storageBucket: "regestration-1e4fd.firebasestorage.app",
+        messagingSenderId: "1024093841187",
+        appId: "1:1024093841187:web:66edb1794a8e11f8bc8e96",
+        measurementId: "G-CKQKF5DKBR"
+      };
+      
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const toggle = (section) => {
+      document.getElementById('register-section').classList.add('hidden');
+      document.getElementById('login-section').classList.add('hidden');
+      document.getElementById('dashboard-section').classList.add('hidden');
+
+      if (section === 'register') document.getElementById('register-section').classList.remove('hidden');
+      else if (section === 'login') document.getElementById('login-section').classList.remove('hidden');
+      else if (section === 'dashboard') document.getElementById('dashboard-section').classList.remove('hidden');
+    };
+
+    const register = () => {
+      const name = document.getElementById('reg-name').value;
+      const email = document.getElementById('reg-email').value;
+      const password = document.getElementById('reg-password').value;
+      const userId = Date.now();
+
+      db.ref("users/" + userId).set({ name, email, password }).then(() => {
+        alert("Registration Successful! Please log in.");
+        toggle('login');
+      });
+    };
+
+    const login = () => {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      db.ref("users").once("value", snapshot => {
+        let found = false;
+        snapshot.forEach(child => {
+          const user = child.val();
+          if (user.email === email && user.password === password) {
+            found = true;
+            localStorage.setItem("user", JSON.stringify(user));
+            loadDashboard();
+          }
+        });
+        if (!found) alert("Wrong credentials! Try again.");
+      });
+    };
+
+    const loadDashboard = () => {
+      toggle('dashboard');
+      fetch("https://fakestoreapi.com/products")
+        .then(res => res.json())
+        .then(data => {
+          const div = document.getElementById("products");
+          div.innerHTML = "";
+          data.forEach(p => {
+            div.innerHTML += `
+              <div class="product">
+                <img src="${p.image}" alt="${p.title}">
+                <p><b>${p.title}</b></p>
+                <p>Price: $${p.price}</p>
+              </div>
+            `;
+          });
+        });
+    };
+
+    const logout = () => {
+      localStorage.removeItem("user");
+      toggle('login');
+    };
+
+    // Auto-login if already logged in
+    window.onload = () => {
+      const user = localStorage.getItem("user");
+      if (user) loadDashboard();
+      else toggle('register');
+    };
+  </script>
+</body>
+</html>

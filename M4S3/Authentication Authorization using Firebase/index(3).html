@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Role-Based Admin Panel</title>
+  <style>
+    .hidden { display: none; }
+    .product { border: 1px solid #ccc; padding: 10px; margin: 10px; }
+    img { width: 100px; }
+  </style>
+</head>
+<body>
+
+  <!-- Register -->
+  <div id="register-section">
+    <h2>Register</h2>
+    <input id="reg-email" type="email" placeholder="Email"><br>
+    <input id="reg-password" type="password" placeholder="Password"><br>
+    <select id="reg-role">
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select><br>
+    <button onclick="register()">Register</button>
+    <p>Already have an account? <a href="#" onclick="toggle('login')">Login</a></p>
+  </div>
+
+  <!-- Login -->
+  <div id="login-section" class="hidden">
+    <h2>Login</h2>
+    <input id="login-email" type="email" placeholder="Email"><br>
+    <input id="login-password" type="password" placeholder="Password"><br>
+    <button onclick="login()">Login</button>
+    <p>New user? <a href="#" onclick="toggle('register')">Register</a></p>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="admin-dashboard" class="hidden">
+    <h2>Admin Dashboard</h2>
+    <button onclick="logout()">Logout</button><br><br>
+    <input id="prod-title" placeholder="Product Title"><br>
+    <input id="prod-price" type="number" placeholder="Price"><br>
+    <input id="prod-img" placeholder="Image URL"><br>
+    <button onclick="addProduct()">Add Product</button>
+    <div id="admin-products"></div>
+  </div>
+
+  <!-- User Dashboard -->
+  <div id="user-dashboard" class="hidden">
+    <h2>User Dashboard</h2>
+    <button onclick="logout()">Logout</button><br><br>
+    <div id="user-products"></div>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+
+  <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAvwhsGI_xVrRStxuAl8EzjKiCF9ARFNFA",
+        authDomain: "regestration-1e4fd.firebaseapp.com",
+        projectId: "regestration-1e4fd",
+        storageBucket: "regestration-1e4fd.firebasestorage.app",
+        messagingSenderId: "1024093841187",
+        appId: "1:1024093841187:web:66edb1794a8e11f8bc8e96",
+        measurementId: "G-CKQKF5DKBR"
+      };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    const toggle = (section) => {
+      ["register-section", "login-section", "admin-dashboard", "user-dashboard"].forEach(id => {
+        document.getElementById(id).classList.add("hidden");
+      });
+      document.getElementById(section).classList.remove("hidden");
+    };
+
+    const register = () => {
+      const email = document.getElementById('reg-email').value;
+      const password = document.getElementById('reg-password').value;
+      const role = document.getElementById('reg-role').value;
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          const userId = userCredential.user.uid;
+          db.ref("users/" + userId).set({ email, role });
+          alert("Registration successful! Please login.");
+          toggle("login-section");
+        })
+        .catch(error => alert(error.message));
+    };
+
+    const login = () => {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          const userId = userCredential.user.uid;
+          db.ref("users/" + userId).once("value").then(snapshot => {
+            const role = snapshot.val().role;
+            localStorage.setItem("role", role);
+            if (role === "admin") loadAdminDashboard();
+            else loadUserDashboard();
+          });
+        })
+        .catch(() => alert("Incorrect email or password!"));
+    };
+
+    const logout = () => {
+      auth.signOut().then(() => {
+        localStorage.removeItem("role");
+        toggle("login-section");
+      });
+    };
+
+    const addProduct = () => {
+      const title = document.getElementById("prod-title").value;
+      const price = document.getElementById("prod-price").value;
+      const image = document.getElementById("prod-img").value;
+      const productId = Date.now();
+
+      db.ref("products/" + productId).set({ title, price, image });
+      loadAdminDashboard();
+    };
+
+    const editProduct = (id) => {
+      const newTitle = prompt("Enter new title");
+      if (newTitle) db.ref("products/" + id + "/title").set(newTitle).then(loadAdminDashboard);
+    };
+
+    const deleteProduct = (id) => {
+      db.ref("products/" + id).remove().then(loadAdminDashboard);
+    };
+
+    const loadAdminDashboard = () => {
+      if (localStorage.getItem("role") !== "admin") return loadUserDashboard();
+      toggle("admin-dashboard");
+
+      db.ref("products").once("value").then(snapshot => {
+        const div = document.getElementById("admin-products");
+        div.innerHTML = "";
+        snapshot.forEach(child => {
+          const p = child.val();
+          div.innerHTML += `
+            <div class="product">
+              <img src="${p.image}" alt="${p.title}">
+              <p><b>${p.title}</b> - $${p.price}</p>
+              <button onclick="editProduct('${child.key}')">Edit</button>
+              <button onclick="deleteProduct('${child.key}')">Delete</button>
+            </div>
+          `;
+        });
+      });
+    };
+
+    const loadUserDashboard = () => {
+      if (localStorage.getItem("role") !== "user") return loadAdminDashboard();
+      toggle("user-dashboard");
+
+      db.ref("products").once("value").then(snapshot => {
+        const div = document.getElementById("user-products");
+        div.innerHTML = "";
+        snapshot.forEach(child => {
+          const p = child.val();
+          div.innerHTML += `
+            <div class="product">
+              <img src="${p.image}" alt="${p.title}">
+              <p><b>${p.title}</b> - $${p.price}</p>
+            </div>
+          `;
+        });
+      });
+    };
+
+    // Auto-login dashboard
+    window.onload = () => {
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          db.ref("users/" + user.uid).once("value").then(snapshot => {
+            const role = snapshot.val().role;
+            localStorage.setItem("role", role);
+            if (role === "admin") loadAdminDashboard();
+            else loadUserDashboard();
+          });
+        } else {
+          toggle("register-section");
+        }
+      });
+    };
+  </script>
+</body>
+</html>
