@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Product Grid Viewer</title>
+    <style>
+        body {
+            background-color: rgb(196, 208, 217);
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: xx-large;
+            color: blue;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        input,
+        select,
+        button {
+            padding: 5px;
+            margin: 3px;
+            font-size: 14px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+        }
+
+        .title {
+            font-size: 14px;
+            font-weight: bold;
+
+        }
+
+        .price {
+            color: rgb(7, 157, 7);
+            font-size: 16px;
+        }
+
+        .rating {
+            font-size: 14px;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2> Product Grid Viewer</h2>
+
+    <div class="controls">
+        <input type="text" id="search" placeholder="Search Product...">
+        <select id="sort">
+            <option value="">Sort By</option>
+            <option value="price-asc">Price(Low-High)</option>
+            <option value="price-dec">Price(High-Low)</option>
+            <option value="rating">Rating</option>
+        </select>
+
+    </div>
+
+    <div id="product-grid" class="grid"></div>
+
+    <div class="pagination">
+        <button id="prev">Prev</button>
+        <spam id="page-indicator"></spam>
+        <button id="next">Next</button>
+    </div>
+</body>
+
+</html>
+<script>
+    let apiUrl = "https://fakestoreapi.com/products";
+    let allProducts = [];
+    let filteredProducts = [];
+    let currentPage = 1;
+    let itemsPerPage = 6;
+
+    let grid = document.getElementById('product-grid');
+    let searchBox = document.getElementById('search');
+    let sortBox = document.getElementById('sort');
+    let pageIndicator = document.getElementById('page-indicator');
+
+    let fetchProducts = async () => {
+        let res = await fetch(apiUrl);
+        allProducts = await res.json();
+        filteredProducts = [...allProducts];
+        renderProducts();
+    };
+
+    let renderProducts = () => {
+        grid.innerHTML = "";
+        let start = (currentPage - 1) * itemsPerPage;
+        let end = start + itemsPerPage;
+        let paginated = filteredProducts.slice(start, end);
+
+        paginated.forEach(p => {
+            let card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+          <img src="${p.image}" />
+          <div class="title" title="${p.title}">${p.title.length > 40 ? p.title.slice(0, 40) + "..." : p.title}</div>
+          <div class="price">$${p.price}</div>
+          <div class="rating">Rating: ${p.rating.rate}</div>
+        `;
+            grid.appendChild(card);
+        });
+
+        updatePagination();
+    };
+
+    let updatePagination = () => {
+        let totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+        pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
+        document.getElementById('prev').disabled = currentPage === 1;
+        document.getElementById('next').disabled = currentPage === totalPages;
+    };
+
+    searchBox.addEventListener("input", () => {
+        let query = searchBox.value.toLowerCase();
+        filteredProducts = allProducts.filter(p => p.title.toLowerCase().includes(query));
+        currentPage = 1;
+        applySort();
+        renderProducts();
+    });
+
+    sortBox.addEventListener("change", () => {
+        applySort();
+        renderProducts();
+    });
+
+    function applySort() {
+        let sortVal = sortBox.value;
+        if (sortVal === "price-asc") {
+            filteredProducts.sort((a, b) => a.price - b.price);
+        } else if (sortVal === "price-desc") {
+            filteredProducts.sort((a, b) => b.price - a.price);
+        } else if (sortVal === "rating") {
+            filteredProducts.sort((a, b) => b.rating.rate - a.rating.rate);
+        }
+    }
+
+    document.getElementById('prev').addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderProducts();
+        }
+    });
+
+    document.getElementById('next').addEventListener("click", () => {
+        let totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderProducts();
+        }
+    });
+
+    fetchProducts();
+</script>
