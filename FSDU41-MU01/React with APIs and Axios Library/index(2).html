@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>React Product Cards</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px;
+      cursor: pointer;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+
+    .price {
+      font-weight: bold;
+      color: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+ 
+  <script type="text/babel">
+    const { useState } = React;
+
+    function App() {
+      const [products, setProducts] = useState([]);
+      const [loading, setLoading] = useState(false);
+      const [error, setError] = useState('');
+
+      const loadProducts = async () => {
+        setLoading(true);
+        setError('');
+        try {
+          const response = await fetch('https://fakestoreapi.com/products');
+          if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+          const data = await response.json();
+          setProducts(data);
+        } catch (err) {
+          console.error(err);
+          setError('Failed to load products. Please try again.');
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      const clearProducts = () => {
+        setProducts([]);
+        setError('');
+      };
+
+      return (
+        <div>
+          <h1>Product Viewer</h1>
+          <button onClick={loadProducts}>Load Products</button>
+          {products.length > 0 && (
+            <button onClick={clearProducts} style={{ backgroundColor: '#e57373', color: 'white' }}>
+              Clear Products
+            </button>
+          )}
+
+          {loading && <p>Loading products...</p>}
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {!loading && !error && products.length === 0 && <p>No products to display.</p>}
+
+          <div className="grid">
+            {products.map((product) => (
+              <div key={product.id} className="card">
+                <img src={product.image} alt={product.title} />
+                <h4>{product.title}</h4>
+                <p className="price">${product.price.toFixed(2)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

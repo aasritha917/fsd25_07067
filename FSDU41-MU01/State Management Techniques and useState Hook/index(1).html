@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>React To-Do List Debugged</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    .completed {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    button {
+      margin-left: 10px;
+    }
+
+    input {
+      padding: 6px;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+ <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+
+  <script type="text/babel">
+
+    const { useState } = React
+
+    function TodoApp() {
+      const [tasks, setTasks] = useState([])
+      const [input, setInput] = useState("")
+
+      const addTask = () => {
+        const trimmed = input.trim()
+        if (trimmed === "") return
+        const newTask = {
+          id: Date.now(),
+          text: trimmed,
+          completed: false
+        };
+        setTasks([...tasks, newTask])
+        setInput("");
+      };
+
+      const toggleComplete = (id) => {
+        setTasks(tasks.map(task =>
+          task.id === id ? { ...task, completed: !task.completed } : task
+        ));
+      };
+
+      const deleteTask = (id) => {
+        setTasks(tasks.filter(task => task.id !== id))
+      };
+
+      return (
+        <div>
+          <h2>To-Do List</h2>
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Enter a task"
+          />
+          <button onClick={addTask}>Add Task</button>
+
+          <ul>
+            {tasks.map(task => (
+              <li key={task.id}>
+                <span
+                  onClick={() => toggleComplete(task.id)}
+                  className={task.completed ? "completed" : ""}
+                  style={{ cursor: "pointer" }}
+                >
+                  {task.text}
+                </span>
+                <button onClick={() => deleteTask(task.id)}>Delete</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"))
+    root.render(<TodoApp />)
+  </script>
+</body>
+</html>

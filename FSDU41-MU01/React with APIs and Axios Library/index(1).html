@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fetch Products - React App</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  
+  <script type="text/babel">
+    const { useState } = React;
+
+    function App() {
+      const [loading, setLoading] = useState(false);
+      const [error, setError] = useState('');
+
+      const fetchProducts = async () => {
+        setLoading(true);
+        setError('');
+
+        try {
+          const response = await fetch('https://fakestoreapi.com/products');
+          if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log('Fetched Products:', data);
+        } catch (err) {
+          console.error('Error fetching products:', err);
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      return (
+        <div style={{ textAlign: 'center', marginTop: '50px', fontFamily: 'Arial' }}>
+          <h1>FakeStore Product Fetcher</h1>
+          <button onClick={fetchProducts} style={{ padding: '10px 20px', fontSize: '16px' }}>
+            Fetch Products
+          </button>
+
+          {loading && <p style={{ color: 'blue' }}>Loading...</p>}
+          {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

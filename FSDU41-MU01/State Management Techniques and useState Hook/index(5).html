@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Attendance Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: center;
+    }
+    .attendance-app {
+      background: white;
+      padding: 25px 30px;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .filter-container {
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    select {
+      padding: 7px 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+      margin-bottom: 20px;
+    }
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      font-weight: 600;
+    }
+    .present {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .absent {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    button {
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .total {
+      font-weight: bold;
+      text-align: center;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function AttendanceManager() {
+      const [students, setStudents] = useState([
+        { id: 1, name: "Alice", present: true },
+        { id: 2, name: "Bob", present: false },
+        { id: 3, name: "Charlie", present: true },
+        { id: 4, name: "Diana", present: false },
+        { id: 5, name: "Ethan", present: true },
+      ]);
+      const [filter, setFilter] = useState("All"); // "All", "Present", "Absent"
+
+      const toggleAttendance = (id) => {
+        setStudents((prev) =>
+          prev.map((student) =>
+            student.id === id ? { ...student, present: !student.present } : student
+          )
+        );
+      };
+
+      const filteredStudents = students.filter(student => {
+        if (filter === "All") return true;
+        if (filter === "Present") return student.present;
+        if (filter === "Absent") return !student.present;
+        return true;
+      });
+
+      const presentCount = students.filter(s => s.present).length;
+
+      return (
+        <div className="attendance-app">
+          <h2>Attendance Manager</h2>
+
+          <div className="filter-container">
+            <label>
+              Filter:{" "}
+              <select value={filter} onChange={e => setFilter(e.target.value)}>
+                <option value="All">All</option>
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+              </select>
+            </label>
+          </div>
+
+          <ul>
+            {filteredStudents.length === 0 ? (
+              <li style={{ textAlign: "center", fontStyle: "italic", color: "#555" }}>
+                No students to display.
+              </li>
+            ) : (
+              filteredStudents.map(student => (
+                <li
+                  key={student.id}
+                  className={student.present ? "present" : "absent"}
+                >
+                  <span>{student.name} - {student.present ? "Present" : "Absent"}</span>
+                  <button onClick={() => toggleAttendance(student.id)}>Toggle</button>
+                </li>
+              ))
+            )}
+          </ul>
+
+          <div className="total">Total Present: {presentCount}</div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<AttendanceManager />);
+  </script>
+</body>
+</html>

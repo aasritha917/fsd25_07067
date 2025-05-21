@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simple Todo List</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #fafafa;
+      display: flex;
+      justify-content: center;
+    }
+    .todo-app {
+      background: white;
+      padding: 25px 30px;
+      border-radius: 8px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      width: 350px;
+    }
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+      margin-bottom: 20px;
+    }
+    li {
+      background: #eee;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+    }
+    input {
+      padding: 10px;
+      width: calc(100% - 90px);
+      margin-right: 8px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      transition: background-color 0.2s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .clear-btn {
+      background-color: #dc3545;
+      margin-top: 10px;
+      width: 100%;
+    }
+    .clear-btn:hover {
+      background-color: #a71d2a;
+    }
+    .empty-message {
+      text-align: center;
+      font-style: italic;
+      color: #777;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+ 
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function TodoList() {
+      const [tasks, setTasks] = useState(["Buy milk", "Study React"]);
+      const [input, setInput] = useState("");
+
+      const addTask = () => {
+        const trimmed = input.trim();
+        if (trimmed === "") return; // prevent empty task
+        setTasks(prev => [...prev, trimmed]);
+        setInput("");
+      };
+
+      const clearAll = () => {
+        setTasks([]);
+      };
+
+      const handleKeyDown = (e) => {
+        if (e.key === "Enter") addTask();
+      };
+
+      return (
+        <div className="todo-app">
+          <h2>Todo List</h2>
+
+          {tasks.length === 0 ? (
+            <p className="empty-message">No tasks available.</p>
+          ) : (
+            <ul>
+              {tasks.map((task, idx) => (
+                <li key={idx}>{task}</li>
+              ))}
+            </ul>
+          )}
+
+          <div>
+            <input
+              type="text"
+              placeholder="Add new task..."
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <button onClick={addTask}>Add</button>
+          </div>
+
+          <button className="clear-btn" onClick={clearAll}>Clear All</button>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<TodoList />);
+  </script>
+</body>
+</html>
