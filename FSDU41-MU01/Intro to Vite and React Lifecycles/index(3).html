@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>React Profile Card</title>
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <style>
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 300px;
+      font-family: sans-serif;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background-color: #f9f9f9;
+    }
+    .name {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .age {
+      color: #666;
+    }
+    .bio {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    function ProfileCard({ name = "Anonymous", age = 0, bio = "No bio provided." }) {
+      const shortBio = bio.length > 100 ? bio.slice(0, 100) + "… Read More" : bio;
+
+      return (
+        <div className="card">
+          <div className="name">{name}</div>
+          <div className="age">Age: {age}</div>
+          <div className="bio">{shortBio}</div>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <div>
+          <h2 style={{ textAlign: "center" }}>User Profile</h2>
+          <ProfileCard
+            name="Kaluvala Aasritha"
+            age={22}
+            bio="A dedicated software enthusiast, passionate about learning new technologies and building real-world applications."
+          />
+          <ProfileCard age={30} />
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById("root"));
+  </script>
+</body>
+</html>

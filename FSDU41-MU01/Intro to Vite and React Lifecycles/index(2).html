@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Toggle Button</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React and ReactDOM via CDN -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <!-- Your React code -->
+  <script type="text/babel">
+    function ToggleButton({ label }) {
+      const [isOn, setIsOn] = React.useState(false);
+
+      const toggle = () => setIsOn(!isOn);
+
+      return (
+        <div>
+          {label && <span>{label} </span>}
+          <button
+            onClick={toggle}
+            style={{
+              color: isOn ? 'green' : 'red',
+              fontWeight: 'bold'
+            }}
+          >
+            {isOn ? 'ON' : 'OFF'}
+          </button>
+        </div>
+      );
+    }
+
+    ReactDOM.render(
+      <ToggleButton label="Power:" />,
+      document.getElementById('root')
+    );
+  </script>
+</body>
+</html>

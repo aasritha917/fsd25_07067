@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>React Counter</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React and ReactDOM via CDN -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <!-- Your React code -->
+  <script type="text/babel">
+    function Counter({ initialValue }) {
+      const [count, setCount] = React.useState(initialValue);
+
+      return (
+        <div>
+          <h2>Counter: {count}</h2>
+          <button onClick={() => setCount(count + 1)}>Increment</button>
+          <button 
+            onClick={() => setCount(count > 0 ? count - 1 : 0)} 
+            disabled={count === 0}
+          >
+            Decrement
+          </button>
+        </div>
+      );
+    }
+
+    ReactDOM.render(
+      <Counter initialValue={0} />,
+      document.getElementById('root')
+    );
+  </script>
+</body>
+</html>

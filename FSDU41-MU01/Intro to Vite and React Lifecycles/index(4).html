@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AutoCorrect App</title>
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      background-color: #f5f5f5;
+    }
+    input {
+      width: 100%;
+      font-size: 18px;
+      padding: 10px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+    .corrected {
+      background-color: white;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    .counter {
+      margin-top: 10px;
+      font-style: italic;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+
+    // Reusable component to display corrected text and count
+    function CorrectedText({ text, corrections }) {
+      // Split input text by spaces (handle multiple spaces by filter)
+      const words = text.split(' ').filter(Boolean);
+
+      // Count how many corrections were made
+      let correctionCount = 0;
+
+      // Map each word, replace if found in corrections
+      const correctedWords = words.map(word => {
+        const lowerWord = word.toLowerCase();
+        if (corrections[lowerWord]) {
+          correctionCount++;
+          // Preserve original casing for simplicity, just replace with correction
+          return corrections[lowerWord];
+        }
+        return word;
+      });
+
+      return (
+        <div className="corrected">
+          <div><strong>Corrected Text:</strong></div>
+          <div>{correctedWords.join(' ')}</div>
+          <div className="counter">Words corrected: {correctionCount}</div>
+        </div>
+      );
+    }
+
+    function AutoCorrectApp() {
+      const [inputText, setInputText] = React.useState('');
+
+      const corrections = {
+        "teh": "the",
+        "recieve": "receive",
+        "adress": "address",
+        "wierd": "weird",
+        "thier": "their"
+      };
+
+      return (
+        <div>
+          <h1>AutoCorrect App</h1>
+          <input
+            type="text"
+            placeholder="Type something here..."
+            value={inputText}
+            onChange={e => setInputText(e.target.value)}
+          />
+          <CorrectedText text={inputText} corrections={corrections} />
+        </div>
+      );
+    }
+
+    ReactDOM.render(<AutoCorrectApp />, document.getElementById('root'));
+
+  </script>
+</body>
+</html>
