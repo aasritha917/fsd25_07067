@@ -39,20 +39,15 @@
 
   <script type="text/babel">
 
-    // Reusable component to display corrected text and count
     function CorrectedText({ text, corrections }) {
-      // Split input text by spaces (handle multiple spaces by filter)
       const words = text.split(' ').filter(Boolean);
 
-      // Count how many corrections were made
       let correctionCount = 0;
 
-      // Map each word, replace if found in corrections
       const correctedWords = words.map(word => {
         const lowerWord = word.toLowerCase();
         if (corrections[lowerWord]) {
           correctionCount++;
-          // Preserve original casing for simplicity, just replace with correction
           return corrections[lowerWord];
         }
         return word;

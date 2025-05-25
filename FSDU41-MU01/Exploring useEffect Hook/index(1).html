@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Theme Toggle App</title>
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      background-color: #eee;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+    .boxes {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .box {
+      flex: 1 1 150px;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      text-align: center;
+      font-weight: bold;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+
+    const { useState, useEffect } = React;
+    function ThemedBox({ theme, children }) {
+      const styles = {
+        light: {
+          backgroundColor: "#fff",
+          color: "#222",
+          border: "2px solid #ccc",
+        },
+        dark: {
+          backgroundColor: "#222",
+          color: "#eee",
+          border: "2px solid #555",
+        }
+      };
+
+      return (
+        <div className="box" style={styles[theme]}>
+          {children}
+        </div>
+      );
+    }
+
+    function ThemeApp() {
+      
+      const [theme, setTheme] = useState(() => {
+        return localStorage.getItem('theme') || 'light';
+      });
+
+      useEffect(() => {
+        localStorage.setItem('theme', theme);
+      }, [theme]);
+      const toggleTheme = () => {
+        setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+      };
+
+      return (
+        <div>
+          <button onClick={toggleTheme}>
+            Switch to {theme === 'light' ? 'Dark' : 'Light'} Theme
+          </button>
+
+          <div className="boxes">
+            <ThemedBox theme={theme}>Box 1</ThemedBox>
+            <ThemedBox theme={theme}>Box 2</ThemedBox>
+            <ThemedBox theme={theme}>Box 3</ThemedBox>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<ThemeApp />, document.getElementById('root'));
+
+  </script>
+</body>
+</html>

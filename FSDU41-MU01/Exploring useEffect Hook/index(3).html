@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Profiles Fetch & Search</title>
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f7f7f7;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .user-card {
+      background: white;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+    .user-name {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+    .user-email, .user-city {
+      color: #555;
+      margin-bottom: 3px;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+
+  const { useState, useEffect } = React;
+
+  function UserCard({ name, email, city }) {
+    return (
+      <div className="user-card">
+        <div className="user-name">{name}</div>
+        <div className="user-email">Email: {email}</div>
+        <div className="user-city">City: {city}</div>
+      </div>
+    );
+  }
+
+  function UserProfiles() {
+    const [users, setUsers] = useState([]);
+    const [search, setSearch] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+      async function fetchUsers() {
+        try {
+          setLoading(true);
+          setError(null);
+          const res = await fetch("https://jsonplaceholder.typicode.com/users");
+          if (!res.ok) throw new Error("Network response was not ok");
+          const data = await res.json();
+          setUsers(data);
+        } catch (err) {
+          setError("Failed to load users. Please try again later.");
+        } finally {
+          setLoading(false);
+        }
+      }
+      fetchUsers();
+    }, []);
+
+    const filteredUsers = users.filter(user =>
+      user.name.toLowerCase().includes(search.toLowerCase())
+    );
+
+    return (
+      <div>
+        <h1>User Profiles</h1>
+        <input
+          type="text"
+          placeholder="Search by name..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          aria-label="Search users by name"
+        />
+
+        {loading && <p>Loading users...</p>}
+        {error && <p className="error">{error}</p>}
+
+        {!loading && !error && filteredUsers.length === 0 && (
+          <p>No users found matching "{search}"</p>
+        )}
+
+        {!loading && !error && filteredUsers.map(user => (
+          <UserCard
+            key={user.id}
+            name={user.name}
+            email={user.email}
+            city={user.address.city}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  ReactDOM.render(<UserProfiles />, document.getElementById("root"));
+
+</script>
+
+</body>
+</html>
